@@ -42,7 +42,7 @@ class HelloWorld(BaseSample):
         #usd_path = assets_root_path + "/Isaac/Robots/UniversalRobots/ur10/ur10.usd" #work
 
         #if load usd fail, open the usd file, select a prim, make it default prim
-        usd_path2="/isaac-sim/target_follow_flat.usd"
+        usd_path2="/isaac-sim/exts/motiondex.ur10/target_follow_flat.usd"
         add_reference_to_stage(usd_path=usd_path2,prim_path="/World/tracking")
 
         #usd_path="/isaac-sim/test1.usd" 
