@@ -39,12 +39,14 @@ class HelloWorld(BaseSample):
         if assets_root_path is None:
             carb.log_error("Could not find Isaac Sim assets folder")
         print("asset root path ", assets_root_path)
-        #usd_path = assets_root_path + "/Isaac/Robots/UniversalRobots/ur10/ur10.usd"
+        #usd_path = assets_root_path + "/Isaac/Robots/UniversalRobots/ur10/ur10.usd" #work
+
+        #if load usd fail, open the usd file, select a prim, make it default prim
         usd_path2="/isaac-sim/target_follow_flat.usd"
         add_reference_to_stage(usd_path=usd_path2,prim_path="/World/tracking")
-        usd_path="/isaac-sim/test1.usd" #if load usd fail, open the usd file, select a prim, make it default prim
-        add_reference_to_stage(usd_path=usd_path,prim_path="/World/robot1")
-        #world.scene.add(XFormPrim(prim_path="/World/robot1", name="robot1", position=[0,0,0],orientation=[0.7071068,0, 0,0.7071068]))
+
+        #usd_path="/isaac-sim/test1.usd" 
+        #add_reference_to_stage(usd_path=usd_path,prim_path="/World/robot1")
         world.scene.add(
             VisualSphere(
                 "/World/NavigationDome",
