@@ -34,6 +34,7 @@ class HelloWorld(BaseSample):
 
         world = self.get_world()
         self.world = world
+        self.stepcnt=0
         world.scene.add_default_ground_plane()
 
         assets_root_path = get_assets_root_path()
@@ -64,9 +65,18 @@ class HelloWorld(BaseSample):
 
     async def setup_post_load(self):
         print('xxx hello_world post load, now playing')
+        self.world.add_physics_callback("sim_step", self._on_simulation_step)
         await self.world.play_async() #sim playing, stuck here, fun return when click stop button 
         print('xxx hello_world ,done playing')
         return
+
+    def _on_simulation_step(self, step_size):
+        self.stepcnt+=1
+        observations = self.world.get_observations() #empty observations, might need to add something in usd file
+        if self.stepcnt%100 ==0:
+            print(observations)
+        return
+
 
     async def setup_pre_reset(self):
         return
