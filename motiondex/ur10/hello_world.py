@@ -33,6 +33,7 @@ class HelloWorld(BaseSample):
     def setup_scene(self):
 
         world = self.get_world()
+        self.world = world
         world.scene.add_default_ground_plane()
 
         assets_root_path = get_assets_root_path()
@@ -62,6 +63,9 @@ class HelloWorld(BaseSample):
         return
 
     async def setup_post_load(self):
+        print('xxx hello_world post load, now playing')
+        await self.world.play_async() #sim playing, stuck here, fun return when click stop button 
+        print('xxx hello_world ,done playing')
         return
 
     async def setup_pre_reset(self):
