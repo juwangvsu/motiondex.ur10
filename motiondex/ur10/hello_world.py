@@ -16,7 +16,7 @@
 from isaacsim.examples.interactive.base_sample import BaseSample
 from isaacsim.core.utils.stage import add_reference_to_stage
 # Note: checkout the required tutorials at https://docs.omniverse.nvidia.com/app_isaacsim/app_isaacsim/overview.html
-
+import numpy as np
 from omni.isaac.core.utils.nucleus import get_assets_root_path
 from omni.isaac.core.prims import XFormPrim
 import carb
@@ -25,7 +25,7 @@ from isaacsim.core.api.objects.sphere import VisualSphere
 from omni.isaac.core.articulations import Articulation
 from omni.isaac.core.prims import XFormPrim
 from omni.isaac.universal_robots.kinematics_solver import KinematicsSolver
-
+#from omni.isaac.core.utils.nucleus import get_assets_usd_path
 
 class HelloWorld(BaseSample):
     def __init__(self) -> None:
@@ -77,14 +77,29 @@ class HelloWorld(BaseSample):
         self.stepcnt+=1
         observations = self.world.get_observations() #empty observations, might need to add something in usd file
         position, orientation = XFormPrim("/World/tracking/TargetCube").get_world_pose()
-        print(
-            "[Motiondex] Extension reference position/orientation: {} {}".format(
-                position, orientation
-             )
-        )
+        robot_articulation = Articulation("/World/tracking/Franka")
+        #https://docs.omniverse.nvidia.com/py/isaacsim/source/extensions/omni.isaac.core/docs/index.html
+        body_names = robot_articulation.dof_names
+        #joint_position = robot_articulation.body_link_state_w["panda_joint2"]
+        joint_position = robot_articulation.get_joint_positions()
+        print(f"Joint Position: {joint_position}")
+        print(body_names)
 
         if self.stepcnt%100 ==0:
             print(observations)
+            print(
+                "[Motiondex] Extension reference position/orientation: {} {}".format(
+                    position, orientation
+                )
+            )
+        # set only the fingers in closed position: panda_finger_joint1 (7) and panda_finger_joint2 (8) to 0.0
+        if self.stepcnt%100 ==30:
+            robot_articulation.set_joint_positions(np.array([0.04, 0.04]), joint_indices=np.array([7, 8]))
+
+        # set only the fingers in open position: panda_finger_joint1 (7) and panda_finger_joint2 (8) to 0.0
+        if self.stepcnt%100 ==80:
+            robot_articulation.set_joint_positions(np.array([0.004, 0.004]), joint_indices=np.array([7, 8]))
+
         return
 
 
