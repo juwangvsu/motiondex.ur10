@@ -22,6 +22,9 @@ from omni.isaac.core.prims import XFormPrim
 import carb
 from isaacsim.core.api.objects.capsule import VisualCapsule
 from isaacsim.core.api.objects.sphere import VisualSphere
+from omni.isaac.core.articulations import Articulation
+from omni.isaac.core.prims import XFormPrim
+from omni.isaac.universal_robots.kinematics_solver import KinematicsSolver
 
 
 class HelloWorld(BaseSample):
@@ -73,6 +76,13 @@ class HelloWorld(BaseSample):
     def _on_simulation_step(self, step_size):
         self.stepcnt+=1
         observations = self.world.get_observations() #empty observations, might need to add something in usd file
+        position, orientation = XFormPrim("/World/tracking/TargetCube").get_world_pose()
+        print(
+            "[Motiondex] Extension reference position/orientation: {} {}".format(
+                position, orientation
+             )
+        )
+
         if self.stepcnt%100 ==0:
             print(observations)
         return
